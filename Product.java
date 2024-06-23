@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 class Product {
     private String name;
@@ -134,5 +134,43 @@ class Buyer {
     public void addBalance(double amount) {
         this.balance += amount;
     }
+
+class ProductDisplayPage {
+    private ArrayList<Product> products;
+
+    public ProductDisplayPage() {
+        this.products = new ArrayList<>();
+    }
+
+    public void displayProducts() {
+        for (Product product : products) {
+            System.out.println(product.getName() + " - Price: $" + product.getPrice());
+        }
+    }
+
+    public void searchProducts(String keyword) {
+        for (Product product : products) {
+            if (product.getName().toLowerCase().contains(keyword.toLowerCase())) {
+                System.out.println(product.getName() + " - Price: $" + product.getPrice());
+            }
+        }
+    }
+
+    public void sortProductsByPrice() {
+        products.sort((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
+    }
+
+    public void goToCartPanel() {
+        System.out.println("Navigating to cart panel...");
+    }
+
+    public void goToUserProfilePanel() {
+        System.out.println("Navigating to user profile panel...");
+    }
+}
 
 }
