@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+
 
 public class ShopGUI {
     private JFrame frame;
@@ -14,11 +16,13 @@ public class ShopGUI {
         cardLayout = new CardLayout();
         frame.setLayout(cardLayout);
 
-        mainPanel = new JPanel();
+        mainPanel = new JPanel(new BorderLayout());
         signInPanel = new JPanel();
         signUpPanel = new JPanel();
         managerSignInPanel = new JPanel();
         cartPanel = new JPanel();
+        storeManager = new StoreManager();
+
 
         frame.add(mainPanel, "Main");
         frame.add(signInPanel, "SignIn");
@@ -26,16 +30,11 @@ public class ShopGUI {
         frame.add(managerSignInPanel, "ManagerSignIn");
         frame.add(cartPanel, "Cart");
 
-        storeManager = new StoreManager();
 
         setupMainPanel();
-
         setupSignInPanel();
-
         setupSignUpPanel();
-
         setupManagerSignInPanel();
-
         setupCartPanel();
 
         cardLayout.show(frame.getContentPane(), "Main");
@@ -191,16 +190,27 @@ public class ShopGUI {
 
         if (currentBuyer != null) {
             JPanel cartItemsPanel = new JPanel();
-            cartItemsPanel.setLayout(new GridLayout(0, 1));
-            for (Product product : currentBuyer.getCart()) {
-                cartItemsPanel.add(new JLabel(product.getName() + " - $" + product.getPrice()));
-            }
+            cartItemsPanel.setLayout(new BoxLayout(cartItemsPanel, BoxLayout.Y_AXIS));
+            JLabel titleLabel = new JLabel("Your Cart");
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
 
-            cartPanel.add(cartItemsPanel, BorderLayout.CENTER);
+            for (Product product : currentBuyer.getCart()) {
+                JLabel itemLabel = new JLabel(product.getName() + " - $" + product.getPrice());
+                cartItemsPanel.add(itemLabel);
+            }
+            JScrollPane scrollPane = new JScrollPane(cartItemsPanel);
+            scrollPane.setPreferredSize(new Dimension(300, 200));
+            cartPanel.add(titleLabel, BorderLayout.NORTH);
+            cartPanel.add(scrollPane, BorderLayout.CENTER);
+        }
+        else {
+            JLabel emptyCartLabel = new JLabel("Your cart is empty.");
+            cartPanel.add(emptyCartLabel, BorderLayout.CENTER);
         }
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Main"));
+        backButton.setBackground(Color.LIGHT_GRAY);
 
         cartPanel.add(backButton, BorderLayout.SOUTH);
     }
