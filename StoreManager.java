@@ -35,7 +35,7 @@ public class StoreManager {
 
     public ArrayList<Product> sortByPrice() {
         ArrayList<Product> sortedList = new ArrayList<>(products);
-        sortedList.sort((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
+        sortedList.sort((p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
         return sortedList;
     }
 
