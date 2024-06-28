@@ -55,4 +55,12 @@ public class UserPanel {
     public void contactSeller() {
         System.out.println("Contacting the seller. Please wait...");
     }
+    public void addToCart(Product product) {
+        user.addToCart(product);
+        System.out.println("Product '" + product.getName() + "' added to the cart.");
+    }
+    public void addProduct(Product product) {
+        products.add(product);
+    }
 }
+
