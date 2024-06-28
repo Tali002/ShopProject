@@ -22,7 +22,7 @@ public class ProductDisplayPage {
     }
 
     public void sortProductsByPrice() {
-        products.sort((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
+        products.sort((p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
     }
 
     public void addProduct(Product product) {
