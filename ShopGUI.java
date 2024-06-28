@@ -45,45 +45,89 @@ public class ShopGUI {
     }
 
     private void setupMainPanel() {
+
+
         mainPanel.setLayout(new BorderLayout());
 
-        JPanel productDisplayPanel = new JPanel();
-        productDisplayPanel.setLayout(new GridLayout(0, 1));
+        JPanel productDisplayPanel = createProductDisplayPanel();
+        JPanel controlPanel = createControlPanel();
 
-        Product product1 = new Product("Product 1", 100, "image1.jpg", "Category 1", 4.5);
+        mainPanel.add(productDisplayPanel, BorderLayout.CENTER);
+        mainPanel.add(controlPanel, BorderLayout.NORTH);
+    }
+
+    private JPanel createProductDisplayPanel() {
+        JPanel productDisplayPanel = new JPanel();
+        productDisplayPanel.setLayout(new GridLayout(0, 2, 10, 10));
+
+        Product product1 = new Product("Product 1", 100, "C:/Users/alito/IdeaProjects/ShopProject/src/image1.jpg", "Category 1", 4.5);
         Product product2 = new Product("Product 2", 200, "image2.jpg", "Category 2", 3.8);
         storeManager.addProduct(product1);
         storeManager.addProduct(product2);
-
         for (Product product : storeManager.getAllProducts()) {
-            JPanel productPanel = new JPanel();
-            productPanel.setLayout(new GridLayout(1, 4));
-            productPanel.add(new JLabel(product.getName()));
-            productPanel.add(new JLabel("$" + product.getPrice()));
-            productPanel.add(new JLabel(new ImageIcon(product.getImage())));
-            JButton addToCartButton = new JButton("Add to Cart");
-            addToCartButton.addActionListener(e -> {
-                if (currentBuyer != null) {
-                    currentBuyer.addToCart(product);
-                    JOptionPane.showMessageDialog(frame, "Added to cart!");
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Please sign in first!");
-                }
-            });
-            productPanel.add(addToCartButton);
+            JPanel productPanel = createProductPanel(product);
             productDisplayPanel.add(productPanel);
         }
 
-        mainPanel.add(productDisplayPanel, BorderLayout.CENTER);
+        return productDisplayPanel;
+    }
+    private JPanel createProductPanel(Product product) {
+        JPanel productPanel = new JPanel();
+        productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS));
 
+        JLabel nameLabel = new JLabel(product.getName());
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
+
+        JLabel priceLabel = new JLabel("$" + product.getPrice());
+        priceLabel.setForeground(Color.BLUE);
+
+        JLabel imageLabel = new JLabel(new ImageIcon(product.getImage()));
+
+        JPanel ratingPanel = new JPanel();
+        for (int i = 0; i < 5; i++) {
+            JLabel starLabel = new JLabel("\u2605");
+            starLabel.setForeground(i < product.getRating() ? Color.YELLOW : Color.LIGHT_GRAY);
+            ratingPanel.add(starLabel);
+        }
+
+        JButton addToCartButton = new JButton("Add to Cart");
+        addToCartButton.addActionListener(e -> handleAddToCart(product));
+
+        JPanel infoPanel = new JPanel(new BorderLayout());
+        infoPanel.add(nameLabel, BorderLayout.NORTH);
+        infoPanel.add(priceLabel, BorderLayout.SOUTH);
+
+        productPanel.add(imageLabel);
+        productPanel.add(infoPanel);
+        productPanel.add(ratingPanel); // اضافه کردن امتیازدهی
+        productPanel.add(addToCartButton);
+
+        productPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+
+        return productPanel;
+    }
+
+
+
+
+    private void handleAddToCart(Product product) {
+        if (currentBuyer != null) {
+            currentBuyer.addToCart(product);
+            JOptionPane.showMessageDialog(frame, "Added to cart!");
+        } else {
+            JOptionPane.showMessageDialog(frame, "Please sign in first!");
+        }
+    }
+    private JPanel createControlPanel() {
         JPanel controlPanel = new JPanel();
         JButton signInButton = new JButton("Sign In");
-        signInButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "SignIn"));
         JButton signUpButton = new JButton("Sign Up");
-        signUpButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "SignUp"));
         JButton managerSignInButton = new JButton("Manager Sign In");
-        managerSignInButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "ManagerSignIn"));
         JButton cartButton = new JButton("Cart");
+
+        signInButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "SignIn"));
+        signUpButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "SignUp"));
+        managerSignInButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "ManagerSignIn"));
         cartButton.addActionListener(e -> {
             if (currentBuyer != null) {
                 cardLayout.show(frame.getContentPane(), "Cart");
@@ -98,9 +142,8 @@ public class ShopGUI {
         controlPanel.add(managerSignInButton);
         controlPanel.add(cartButton);
 
-        mainPanel.add(controlPanel, BorderLayout.NORTH);
+        return controlPanel;
     }
-
     private void setupSignInPanel() {
         signInPanel.setLayout(new GridLayout(3, 2));
         JTextField usernameField = new JTextField();
