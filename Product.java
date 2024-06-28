@@ -33,6 +33,26 @@ public class Product {
         return rating;
     }
 
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
