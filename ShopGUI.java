@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
-
 
 public class ShopGUI {
     private JFrame frame;
@@ -108,10 +106,6 @@ public class ShopGUI {
 
         return productPanel;
     }
-
-
-
-
     private void handleAddToCart(Product product) {
         if (currentBuyer != null) {
             currentBuyer.addToCart(product);
@@ -181,16 +175,9 @@ public class ShopGUI {
         JTextField usernameField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
         JButton signUpButton = new JButton("Sign Up");
+        signUpButton.addActionListener(e -> handleSignUp(usernameField.getText(), new String(passwordField.getPassword())));
+
         JButton backButton = new JButton("Back");
-
-        signUpButton.addActionListener(e -> {
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
-            storeManager.registerUser(username, password);
-            JOptionPane.showMessageDialog(frame, "Sign up successful! Please sign in.");
-            cardLayout.show(frame.getContentPane(), "SignIn");
-        });
-
         backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Main"));
 
         signUpPanel.add(new JLabel("Username:"));
@@ -199,6 +186,21 @@ public class ShopGUI {
         signUpPanel.add(passwordField);
         signUpPanel.add(signUpButton);
         signUpPanel.add(backButton);
+    }
+    private void handleSignUp(String username, String password) {
+        if (isValidUsername(username) && isValidPassword(password)) {
+            storeManager.registerUser(username, password);
+            JOptionPane.showMessageDialog(frame, "Sign up successful! Please sign in.");
+            cardLayout.show(frame.getContentPane(), "SignIn");
+        } else {
+            JOptionPane.showMessageDialog(frame, "Invalid username or password. Please try again.");
+        }
+    }
+    private boolean isValidUsername(String username) {
+        return username.matches("[a-zA-Z0-9]+");
+    }
+    private boolean isValidPassword(String password) {
+        return password.length() >= 4;
     }
 
     private void setupManagerSignInPanel() {
@@ -228,7 +230,6 @@ public class ShopGUI {
         managerSignInPanel.add(signInButton);
         managerSignInPanel.add(backButton);
     }
-
     private void setupCartPanel() {
         cartPanel.removeAll();
         cartPanel.setLayout(new BorderLayout());
@@ -260,7 +261,4 @@ public class ShopGUI {
         cartPanel.add(backButton, BorderLayout.SOUTH);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(ShopGUI::new);
-    }
 }
