@@ -2,37 +2,33 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        Buyer buyer = new Buyer("B123", "John Doe", 500.0, "mypassword");
+
         StoreManager storeManager = new StoreManager();
         storeManager.addProduct(new Product("Laptop", 1000.0, "laptop.jpg", "Electronics", 4.5));
         storeManager.addProduct(new Product("Phone", 800.0, "phone.jpg", "Electronics", 4.2));
 
-        ArrayList<Product> searchedProducts = storeManager.searchProducts("Laptop");
-        System.out.println("Searched products: " + searchedProducts);
+        UserPanel userPanel = new UserPanel(buyer);
+        userPanel.addProduct(storeManager.searchProducts("Laptop").get(0));
+        userPanel.addProduct(storeManager.searchProducts("Phone").get(0));
 
-        ArrayList<Product> sortedByPrice = storeManager.sortByPrice();
-        System.out.println("Products sorted by price: " + sortedByPrice);
+        userPanel.displayUserProfile();
 
-        ArrayList<Product> sortedByRating = storeManager.sortByRating();
-        System.out.println("Products sorted by rating: " + sortedByRating);
+        userPanel.addToCart(storeManager.searchProducts("Laptop").get(0));
+        userPanel.addToCart(storeManager.searchProducts("Phone").get(0));
 
-        ProductDisplayPage displayPage = new ProductDisplayPage();
-        displayPage.addProduct(new Product("Tablet", 600.0, "tablet.jpg", "Electronics", 4.0));
-        displayPage.addProduct(new Product("Headphones", 150.0, "headphones.jpg", "Electronics", 4.8));
+        userPanel.displayCart();
+        userPanel.displayProducts();
 
-        System.out.println("All products:");
-        displayPage.displayProducts();
+        ArrayList<Product> searchedProducts = userPanel.searchProducts("Phone");
+        System.out.println("Searched products (keyword: 'Phone'): " + searchedProducts);
 
-        System.out.println("Searched products (keyword: 'Headphones'):");
-        displayPage.searchProducts("Headphones");
+        userPanel.sortProductsByPrice();
+        System.out.println("Products sorted by price:");
+        userPanel.displayProducts();
 
-        displayPage.sortProductsByPrice();
-        System.out.println("Products sorted by price:"); // برعکس سسورت میکنه
-        displayPage.displayProducts();
+        userPanel.setRating(searchedProducts.get(0), 4.0);
 
-        displayPage.goToCartPanel();
-        displayPage.goToUserProfilePanel();
+        userPanel.contactSeller();
     }
 }
-
-
-
