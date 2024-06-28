@@ -215,7 +215,4 @@ public class ShopGUI {
         cartPanel.add(backButton, BorderLayout.SOUTH);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(ShopGUI::new);
-    }
 }
