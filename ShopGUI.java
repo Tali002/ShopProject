@@ -60,10 +60,12 @@ public class ShopGUI {
         JPanel productDisplayPanel = new JPanel();
         productDisplayPanel.setLayout(new GridLayout(0, 2, 10, 10));
 
-        Product product1 = new Product("Product 1", 100, "C:/Users/alito/IdeaProjects/ShopProject/src/image1.jpg", "Category 1", 4.5);
+        Product product1 = new Product("Product 1", 100, "C:\\Users\\alito\\IdeaProjects\\ShopProject\\src\\image1", "Category 1", 4.5);
         Product product2 = new Product("Product 2", 200, "image2.jpg", "Category 2", 3.8);
+        Product product3 = new Product("Product 3", 220, "image1.jpg", "Category 3", 3.3);
         storeManager.addProduct(product1);
         storeManager.addProduct(product2);
+        storeManager.addProduct(product3);
         for (Product product : storeManager.getAllProducts()) {
             JPanel productPanel = createProductPanel(product);
             productDisplayPanel.add(productPanel);
@@ -86,7 +88,7 @@ public class ShopGUI {
         JPanel ratingPanel = new JPanel();
         for (int i = 0; i < 5; i++) {
             JLabel starLabel = new JLabel("\u2605");
-            starLabel.setForeground(i < product.getRating() ? Color.YELLOW : Color.LIGHT_GRAY);
+            starLabel.setForeground(i < product.getRating()-.49 ? Color.YELLOW : Color.LIGHT_GRAY);
             ratingPanel.add(starLabel);
         }
 
@@ -99,7 +101,7 @@ public class ShopGUI {
 
         productPanel.add(imageLabel);
         productPanel.add(infoPanel);
-        productPanel.add(ratingPanel); // اضافه کردن امتیازدهی
+        productPanel.add(ratingPanel);
         productPanel.add(addToCartButton);
 
         productPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
@@ -258,4 +260,7 @@ public class ShopGUI {
         cartPanel.add(backButton, BorderLayout.SOUTH);
     }
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(ShopGUI::new);
+    }
 }
