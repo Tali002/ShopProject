@@ -32,7 +32,30 @@ public class Buyer {
     public String getPassword() {
         return password;
     }
+    public ArrayList<Product> getCart() {
+        return new ArrayList<>(cart);
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBuyerId(String buyerId) {
+        this.buyerId = buyerId;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public void setCart(ArrayList<Product> cart) {
+        this.cart = cart;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
     public void changePassword(String newPassword) {
         this.password = newPassword;
     }
@@ -48,7 +71,5 @@ public class Buyer {
         cart.remove(product);
     }
 
-    public ArrayList<Product> getCart() {
-        return new ArrayList<>(cart);
-    }
+
 }
