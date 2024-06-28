@@ -12,6 +12,9 @@ public class ProductDisplayPage {
             System.out.println(product.getName() + " - Price: $" + product.getPrice());
         }
     }
+    public ArrayList<Product> getProducts() {
+        return new ArrayList<>(products);
+    }
 
     public void searchProducts(String keyword) {
         for (Product product : products) {
