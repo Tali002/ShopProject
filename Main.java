@@ -1,7 +1,9 @@
+import javax.swing.*;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        SwingUtilities.invokeLater(ShopGUI::new);
         Buyer buyer = new Buyer("B123", "John Doe", 500.0, "mypassword");
 
         StoreManager storeManager = new StoreManager();
