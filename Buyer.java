@@ -7,15 +7,17 @@ public class Buyer implements Cartable {
     private double balance;
     private String password;
     private ArrayList<Product> cart;
+    private String address;
 
 
 
-    public Buyer(String name,String buyerId, double initialBalance, String password) {
+    public Buyer(String name,String buyerId, double initialBalance, String password, String address) {
         this.name = name;
         this.buyerId = buyerId;
         this.balance = initialBalance;
         this.password = password;
         this.cart = new ArrayList<>();
+        this.address = address;
     }
 
     public String getName() {
@@ -32,6 +34,10 @@ public class Buyer implements Cartable {
 
     public String getPassword() {
         return password;
+    }
+
+        public String getAddress() {
+        return address;
     }
 
     public void setName(String name) {
@@ -67,6 +73,10 @@ public class Buyer implements Cartable {
             throw new IllegalArgumentException("Password must be at least 8 characters long.");
         }
         this.password = password;
+    }
+
+        public void setAddress(String Address) {
+        this.address = address;
     }
 
     public void addBalance(double amount) {
