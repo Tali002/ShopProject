@@ -1,60 +1,7 @@
 import java.util.ArrayList;
-
-public class Buyer {
-    private String name;
-    private String buyerId;
-    private double balance;
-    private String password;
-    private ArrayList<Product> cart;
-
-
-
-    public Buyer(String name,String buyerId, double initialBalance, String password) {
-        this.name = name;
-        this.buyerId = buyerId;
-        this.balance = initialBalance;
-        this.password = password;
-        this.cart = new ArrayList<>();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getBuyerId() {
-        return buyerId;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    public ArrayList<Product> getCart() {
-        return new ArrayList<>(cart);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setBuyerId(String buyerId) {
-        this.buyerId = buyerId;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public void setCart(ArrayList<Product> cart) {
-        this.cart = cart;
-    }
-
-import java.util.ArrayList;
-
-public class Buyer {
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+public class Buyer implements Cartable {
     private String name;
     private String buyerId;
     private double balance;
@@ -92,7 +39,19 @@ public class Buyer {
     }
 
     public void setBuyerId(String buyerId) {
-        this.buyerId = buyerId;
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(buyerId.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte hashByte : hashBytes) {
+                String hex = Integer.toHexString(0xff & hashByte);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            this.buyerId = hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setBalance(double balance) {
@@ -124,18 +83,4 @@ public class Buyer {
     public ArrayList<Product> getCart() {
         return new ArrayList<>(cart);
     }
-}
-
-    public void addBalance(double amount) {
-        this.balance += amount;
-    }
-    public void addToCart(Product product) {
-        cart.add(product);
-    }
-
-    public void removeFromCart(Product product) {
-        cart.remove(product);
-    }
-
-
 }
