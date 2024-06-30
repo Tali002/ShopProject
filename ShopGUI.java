@@ -554,7 +554,7 @@ public class ShopGUI {
             JButton finalizeButton = new JButton("Finalize Cart");
             finalizeButton.addActionListener(e -> {
                 if (finalizeCart(currentBuyer)) {
-                    currentBuyer.getCart().clear();
+                    currentBuyer.removeAll();
                     JOptionPane.showMessageDialog(frame, "Cart finalized successfully!");
                     frame.revalidate();
                     frame.repaint();
