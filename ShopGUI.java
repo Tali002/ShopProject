@@ -17,6 +17,7 @@ import java.util.ArrayList;
 //https://stackoverflow.com/questions/54132546/java-login-form
 //https://stackoverflow.com/questions/16636711/java-is-this-good-use-of-bcrypt
 //https://docs.oracle.com/javase/8/docs/technotes/guides/collections/index.html
+//https://stackoverflow.com/questions/10462819/get-keys-from-hashmap-in-java
 
 
 
@@ -361,12 +362,11 @@ public class ShopGUI {
     }
 
     private void viewRegisteredUsers() {
-//        ArrayList<User> users = storeManager.getAllUsers();
-//        StringBuilder userList = new StringBuilder("Registered Users:\n");
-//        for (User user : users) {
-//            userList.append(user.getUsername()).append("\n");
-//        }
-//        JOptionPane.showMessageDialog(frame, userList.toString());
+        StringBuilder userList = new StringBuilder("Registered Users:\n");
+        for (String key : storeManager.getUserCredentials().keySet() ) {
+            userList.append(key).append("\n");
+        }
+        JOptionPane.showMessageDialog(frame, userList.toString());
     }
 
     private void setupSignInPanel() {
@@ -522,7 +522,6 @@ public class ShopGUI {
         signInButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            // Simplified for example, normally you would have a separate check for managers
             if ("manager".equals(username) && "managerpass".equals(password)) {
                 JOptionPane.showMessageDialog(frame, "Manager sign in successful!");
                 cardLayout.show(frame.getContentPane(), "Manager");
