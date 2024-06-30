@@ -522,7 +522,6 @@ public class ShopGUI {
         signInButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            // Simplified for example, normally you would have a separate check for managers
             if ("manager".equals(username) && "managerpass".equals(password)) {
                 JOptionPane.showMessageDialog(frame, "Manager sign in successful!");
                 cardLayout.show(frame.getContentPane(), "Manager");
