@@ -4,13 +4,17 @@ public class Product {
     private String image;
     private String category;
     private double rating;
+    private int quantity;
 
-    public Product(String name, double price, String image, String category, double rating) {
+
+    public Product(String name, double price, String image, String category, double rating,int quantity) {
         this.name = name;
         this.price = price;
         this.image = image;
         this.category = category;
         this.rating = rating;
+        this.quantity = quantity;
+
     }
 
     public String getName() {
@@ -31,6 +35,14 @@ public class Product {
 
     public double getRating() {
         return rating;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public void setRating(double rating) {
