@@ -178,7 +178,7 @@ public class ShopGUI {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
             if (storeManager.verifyUserCredentials(username, password)) {
-                currentBuyer = new Buyer(username, "buyerId", 1000, password); // Simplified for example
+                currentBuyer = new Buyer(username, "buyerId", 1000, "pass","add"); // Simplified for example
                 userPanel = new UserPanel(currentBuyer);
                 JOptionPane.showMessageDialog(frame, "Sign in successful!");
                 cardLayout.show(frame.getContentPane(), "Profile");
