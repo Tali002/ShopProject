@@ -14,9 +14,7 @@ import java.util.ArrayList;
 //https://stackoverflow.com/questions/15363706/how-to-program-this-gui-in-java-swing
 //https://stackoverflow.com/questions/56961921/creating-a-jbutton-with-the-click-of-a-jbutton
 //https://stackoverflow.com/questions/34205782/sort-the-contents-of-a-jtable
-//https://stackoverflow.com/questions/54132546/java-login-form
-//https://stackoverflow.com/questions/16636711/java-is-this-good-use-of-bcrypt
-//https://docs.oracle.com/javase/8/docs/technotes/guides/collections/index.html
+
 
 
 public class ShopGUI {
@@ -521,6 +519,7 @@ public class ShopGUI {
         signInButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
+            // Simplified for example, normally you would have a separate check for managers
             if ("manager".equals(username) && "managerpass".equals(password)) {
                 JOptionPane.showMessageDialog(frame, "Manager sign in successful!");
                 cardLayout.show(frame.getContentPane(), "Manager");
@@ -553,7 +552,10 @@ public class ShopGUI {
             JButton finalizeButton = new JButton("Finalize Cart");
             finalizeButton.addActionListener(e -> {
                 if (finalizeCart(currentBuyer)) {
+                    currentBuyer.getCart().clear();
                     JOptionPane.showMessageDialog(frame, "Cart finalized successfully!");
+                    frame.revalidate();
+                    frame.repaint();
                     cardLayout.show(frame.getContentPane(), "Main");
 
                 } else {
@@ -588,9 +590,22 @@ public class ShopGUI {
     }
     private JPanel createCartItemsPanel(ArrayList<Product> cartItems) {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 1));
+        panel.setLayout(new GridLayout(0, 2));
+
         for (Product product : cartItems) {
-            panel.add(new JLabel(product.getName() + " - $" + product.getPrice()));
+            JLabel productLabel = new JLabel(product.getName() + " - $" + product.getPrice());
+            JButton removeButton = new JButton("Remove");
+            removeButton.setPreferredSize(new Dimension(120, 25));
+            removeButton.addActionListener(e -> {
+                currentBuyer.getCart().remove(product);
+                JOptionPane.showMessageDialog(frame, "Product remove successfully");
+                setupCartPanel();
+                frame.revalidate();
+                frame.repaint();
+                cardLayout.show(frame.getContentPane(), "Main");
+            });
+            panel.add(productLabel);
+            panel.add(removeButton);
         }
         return panel;
     }
@@ -728,6 +743,7 @@ public class ShopGUI {
             addBalancePanel.add(addButton);
             addBalancePanel.add(backButton);
         }
+
     }
     private boolean isValidAmount(double amount) {
         try {
