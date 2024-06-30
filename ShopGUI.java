@@ -599,7 +599,7 @@ public class ShopGUI {
             JButton removeButton = new JButton("Remove");
             removeButton.setPreferredSize(new Dimension(120, 25));
             removeButton.addActionListener(e -> {
-                currentBuyer.getCart().remove(product);
+                currentBuyer.removeFromCart(product);
                 JOptionPane.showMessageDialog(frame, "Product remove successfully");
                 setupCartPanel();
                 frame.revalidate();
