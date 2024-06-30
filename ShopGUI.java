@@ -285,6 +285,9 @@ public class ShopGUI {
 
             profilePanel.add(new JLabel("Name:"));
             profilePanel.add(new JLabel(currentBuyer.getName()));
+            
+            profilePanel.add(new JLabel("Address:"));
+            profilePanel.add(new JLabel(currentBuyer.getAddress()));
 
             profilePanel.add(new JLabel("Buyer ID:"));
             profilePanel.add(new JLabel(currentBuyer.getBuyerId()));
