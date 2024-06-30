@@ -365,7 +365,7 @@ public class ShopGUI {
             JButton addButton = new JButton("Add");
             addButton.addActionListener(e -> {
                 double amount = Double.parseDouble(amountField.getText());
-                currentBuyer.addBalance(amount);
+                if (isValidAmount(amount)) {currentBuyer.addBalance(amount);}
                 JOptionPane.showMessageDialog(frame, "Balance added!");
                 cardLayout.show(frame.getContentPane(), "Profile");
             });
@@ -387,6 +387,13 @@ public class ShopGUI {
 //            cardLayout.show(frame.getContentPane(), "Main");
 //        }
     }
+    private boolean isValidAmount(double amount) {
+        try {
+            return amount > 0; // Ensure positive value
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(frame, "Invalid amount format! Please enter a number.");
+            return false;
+        }}
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(ShopGUI::new);
