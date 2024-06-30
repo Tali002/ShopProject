@@ -294,7 +294,7 @@ public class ShopGUI {
 
         // Product management panel
         JPanel productManagementPanel = new JPanel();
-        productManagementPanel.setLayout(new BoxLayout(productManagementPanel, BoxLayout.Y_AXIS));
+        productManagementPanel.setLayout(new GridLayout(4, 1));
 
         JButton addProductButton = new JButton("Add Product");
         JButton removeProductButton = new JButton("Remove Product");
@@ -308,7 +308,7 @@ public class ShopGUI {
         productManagementPanel.add(removeProductButton);
         productManagementPanel.add(viewUsersButton);
 
-        managerProfilePanel.add(productManagementPanel, BorderLayout.NORTH);
+        managerProfilePanel.add(productManagementPanel);
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Main"));
@@ -522,6 +522,7 @@ public class ShopGUI {
         signInButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
+            // Simplified for example, normally you would have a separate check for managers
             if ("manager".equals(username) && "managerpass".equals(password)) {
                 JOptionPane.showMessageDialog(frame, "Manager sign in successful!");
                 cardLayout.show(frame.getContentPane(), "Manager");
