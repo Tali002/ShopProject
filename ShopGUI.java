@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class ShopGUI {
     private JFrame frame;
-    private JPanel mainPanel, signInPanel, signUpPanel, managerSignInPanel, cartPanel, profilePanel, editProfilePanel, addBalancePanel;
+    private JPanel mainPanel, signInPanel, signUpPanel, managerSignInPanel, cartPanel, managerProfilePanel, profilePanel, editProfilePanel, addBalancePanel;
     private CardLayout cardLayout;
     private Buyer currentBuyer;
     private UserPanel userPanel;
@@ -36,6 +36,7 @@ public class ShopGUI {
         signInPanel = new JPanel();
         signUpPanel = new JPanel();
         managerSignInPanel = new JPanel();
+        managerProfilePanel = new JPanel();
         cartPanel = new JPanel();
         profilePanel = new JPanel();
         editProfilePanel = new JPanel();
@@ -46,6 +47,7 @@ public class ShopGUI {
         frame.add(signInPanel, "SignIn");
         frame.add(signUpPanel, "SignUp");
         frame.add(managerSignInPanel, "ManagerSignIn");
+        frame.add(managerSignInPanel, "Manager");
         frame.add(cartPanel, "Cart");
         frame.add(profilePanel, "Profile");
         frame.add(editProfilePanel, "EditProfile");
@@ -68,6 +70,9 @@ public class ShopGUI {
 
         // Setup cart panel
         setupCartPanel();
+
+        // Setup manager panel
+        setupManagerProfilePanel()
 
         // Setup profile panel
         setupProfilePanel();
@@ -280,6 +285,78 @@ public class ShopGUI {
         return controlPanel;
     }
 
+        private void setupManagerProfilePanel() {
+
+        managerProfilePanel.setLayout(new BorderLayout());
+
+        // Product management panel
+        JPanel productManagementPanel = new JPanel();
+        productManagementPanel.setLayout(new BoxLayout(productManagementPanel, BoxLayout.Y_AXIS));
+
+        JButton addProductButton = new JButton("Add Product");
+        JButton removeProductButton = new JButton("Remove Product");
+        JButton viewUsersButton = new JButton("View Registered Users");
+
+        addProductButton.addActionListener(e -> addProduct());
+        removeProductButton.addActionListener(e -> removeProduct());
+        viewUsersButton.addActionListener(e -> viewRegisteredUsers());
+
+        productManagementPanel.add(addProductButton);
+        productManagementPanel.add(removeProductButton);
+        productManagementPanel.add(viewUsersButton);
+
+        managerProfilePanel.add(productManagementPanel, BorderLayout.NORTH);
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Main"));
+        managerProfilePanel.add(backButton, BorderLayout.SOUTH);
+    }
+
+    private void addProduct() {
+        JTextField nameField = new JTextField();
+        JTextField priceField = new JTextField();
+        JTextField imageField = new JTextField();
+        JTextField categoryField = new JTextField();
+        JTextField ratingField = new JTextField();
+
+        Object[] fields = {
+                "Name:", nameField,
+                "Price:", priceField,
+                "Image Path:", imageField,
+                "Category:", categoryField,
+                "Rating:", ratingField
+        };
+
+        int result = JOptionPane.showConfirmDialog(frame, fields, "Add Product", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String name = nameField.getText();
+            double price = Double.parseDouble(priceField.getText());
+            String image = imageField.getText();
+            String category = categoryField.getText();
+            double rating = Double.parseDouble(ratingField.getText());
+
+            Product newProduct = new Product(name, price, image, category, rating);
+            storeManager.addProduct(newProduct);
+            displayProducts(storeManager.getAllProducts());
+        }
+    }
+
+    private void removeProduct() {
+        String name = JOptionPane.showInputDialog(frame, "Enter the name of the product to remove:");
+//        if (name != null && !name.isEmpty()) {
+//            storeManager.removeProductByName(name);
+//            displayProducts(storeManager.getAllProducts());
+//        }
+    }
+
+    private void viewRegisteredUsers() {
+//        ArrayList<User> users = storeManager.getAllUsers();
+//        StringBuilder userList = new StringBuilder("Registered Users:\n");
+//        for (User user : users) {
+//            userList.append(user.getUsername()).append("\n");
+//        }
+//        JOptionPane.showMessageDialog(frame, userList.toString());
+    }
 
     private void setupSignInPanel() {
         signInPanel.setLayout(new GridBagLayout());
@@ -443,7 +520,7 @@ public class ShopGUI {
             }
         });
 
-        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Main"));
+        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Manager"));
 
         managerSignInPanel.add(new JLabel("Username:"));
         managerSignInPanel.add(usernameField);
