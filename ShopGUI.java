@@ -635,10 +635,6 @@ public class ShopGUI {
             profilePanel.add(addBalanceButton);
             profilePanel.add(backButton);
         }
-//        else {
-//            JOptionPane.showMessageDialog(frame, "Please sign in first!");
-//            cardLayout.show(frame.getContentPane(), "Main");
-//        }
     }
 
     private void setupEditProfilePanel() {
@@ -732,10 +728,6 @@ public class ShopGUI {
             addBalancePanel.add(addButton);
             addBalancePanel.add(backButton);
         }
-//        else {
-//            JOptionPane.showMessageDialog(frame, "Please sign in first!");
-//            cardLayout.show(frame.getContentPane(), "Main");
-//        }
     }
     private boolean isValidAmount(double amount) {
         try {
