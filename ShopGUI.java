@@ -6,6 +6,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+//references:
+//https://docs.oracle.com/javase%2Ftutorial%2Fuiswing%2F%2F/start/index.html
+//https://docs.oracle.com/javase%2F7%2Fdocs%2Fapi%2F/java/awt/GridBagLayout.html
+//https://www.baeldung.com/get-started-with-java-series
+//https://www.vogella.com/tutorials/java.html
+//https://stackoverflow.com/questions/15363706/how-to-program-this-gui-in-java-swing
+//https://stackoverflow.com/questions/56961921/creating-a-jbutton-with-the-click-of-a-jbutton
+//https://stackoverflow.com/questions/34205782/sort-the-contents-of-a-jtable
+
+
+
 public class ShopGUI {
     private JFrame frame;
     private JPanel mainPanel, signInPanel, signUpPanel, managerSignInPanel, cartPanel, profilePanel, editProfilePanel, addBalancePanel;
@@ -323,7 +334,7 @@ public class ShopGUI {
 
             if (loggedIn) {
                 JOptionPane.showMessageDialog(frame, "Sign in successful!");
-                currentBuyer = new Buyer(username, "buyerId", 1000, password,"add"); 
+                currentBuyer = new Buyer(username, "buyerId", 1000, password,"add");
                 userPanel = new UserPanel(currentBuyer);
                 cardLayout.show(frame.getContentPane(), "Profile");
                 setupProfilePanel();
@@ -601,10 +612,7 @@ public class ShopGUI {
             addBalancePanel.add(addButton);
             addBalancePanel.add(backButton);
         }
-//        else {
-//            JOptionPane.showMessageDialog(frame, "Please sign in first!");
-//            cardLayout.show(frame.getContentPane(), "Main");
-//        }
+
     }
     private boolean isValidAmount(double amount) {
         try {
