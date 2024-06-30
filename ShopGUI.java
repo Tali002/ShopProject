@@ -14,6 +14,9 @@ import java.util.ArrayList;
 //https://stackoverflow.com/questions/15363706/how-to-program-this-gui-in-java-swing
 //https://stackoverflow.com/questions/56961921/creating-a-jbutton-with-the-click-of-a-jbutton
 //https://stackoverflow.com/questions/34205782/sort-the-contents-of-a-jtable
+//https://stackoverflow.com/questions/54132546/java-login-form
+//https://stackoverflow.com/questions/16636711/java-is-this-good-use-of-bcrypt
+//https://docs.oracle.com/javase/8/docs/technotes/guides/collections/index.html
 
 
 
