@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class ShopGUI {
@@ -79,31 +80,133 @@ public class ShopGUI {
         productDisplayPanel.setLayout(new GridLayout(0, 1));
         JScrollPane scrollPane = new JScrollPane(productDisplayPanel);
 
-        // Sample products
         Product product1 = new Product("Product 1", 100, "image1.jpg", "Category 1", 4.5);
         Product product2 = new Product("Product 2", 200, "image2.jpg", "Category 2", 3.8);
+        Product product3 = new Product("Product 3", 180, "image3.jpg", "Category 3", 3.3);
+
         storeManager.addProduct(product1);
         storeManager.addProduct(product2);
+        storeManager.addProduct(product3);
 
-        // Display products
         displayProducts(storeManager.getAllProducts());
 
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        JPanel controlPanel = createControlPanel();
 
-        // Create control panel
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.add(controlPanel, BorderLayout.EAST);
+    }
+    private void displayProducts(ArrayList<Product> products) {
+        productDisplayPanel.removeAll();
+        for (Product product : products) {
+            JPanel productPanel = new JPanel();
+            productPanel.setLayout(new GridBagLayout());
+
+            GridBagConstraints c = new GridBagConstraints();
+
+            // Product image
+
+            ClassLoader classLoader = getClass().getClassLoader();
+            URL imageURL = classLoader.getResource(product.getImage());
+            ImageIcon imageIcon = null;
+            if (imageURL != null) {
+                imageIcon = new ImageIcon(imageURL);
+            } else {
+                System.err.println("Warning: Image not found - " + product.getImage());
+            }
+
+            // Product image (check if image loaded)
+            JLabel imageLabel = null;
+            if (imageIcon != null) {
+                imageLabel = new JLabel(imageIcon);
+            } else {
+                imageLabel = new JLabel("Image unavailable");
+            }
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 0;
+            productPanel.add(imageLabel, c);
+
+
+            JPanel detailsPanel = new JPanel();
+            detailsPanel.setLayout(new BorderLayout());
+
+            JLabel nameLabel = new JLabel(product.getName());
+            nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            detailsPanel.add(nameLabel, BorderLayout.NORTH);
+
+
+            JLabel priceLabel = new JLabel("$" + product.getPrice());
+            if (product.getPrice() < 100) {
+                priceLabel.setForeground(Color.GREEN);
+            } else if (product.getPrice() > 200) {
+                priceLabel.setForeground(Color.RED);
+            } else {
+                priceLabel.setForeground(Color.BLACK);
+            }
+            detailsPanel.add(priceLabel, BorderLayout.CENTER);
+
+
+            JPanel ratingPanel = createRatingStars(product.getRating());
+            detailsPanel.add(ratingPanel, BorderLayout.SOUTH);
+
+            c.gridx = 1;
+            c.gridy = 0;
+            productPanel.add(detailsPanel, c);
+
+
+            JButton addToCartButton = new JButton("Add to Cart");
+            addToCartButton.addActionListener(e -> {
+                if (currentBuyer != null) {
+                    currentBuyer.addToCart(product);
+                    JOptionPane.showMessageDialog(frame, "Added to cart!");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Please sign in first!");
+                }
+            });
+            c.fill = GridBagConstraints.NONE;
+            c.anchor = GridBagConstraints.EAST;
+            c.weightx = 1.0;
+            c.gridx = 0;
+            c.gridy = 1;
+            productPanel.add(addToCartButton, c);
+
+            productDisplayPanel.add(productPanel);
+        }
+        productDisplayPanel.revalidate();
+        productDisplayPanel.repaint();
+    }
+
+    private JPanel createRatingStars(double rating) {
+        JPanel ratingPanel = new JPanel();
+        ratingPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        for (int i = 0; i < Math.floor(rating); i++) {
+            JLabel starLabel = new JLabel("\u2605"); // Unicode star symbol
+            starLabel.setForeground(Color.YELLOW);
+            ratingPanel.add(starLabel);
+        }
+        if (rating - Math.floor(rating) > 0) {
+            JLabel halfStarLabel = new JLabel("\u260A"); // Unicode half star symbol
+            halfStarLabel.setForeground(Color.YELLOW);
+            ratingPanel.add(halfStarLabel);
+        }
+        return ratingPanel;
+    }
+
+
+    private JPanel createControlPanel() {
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(new GridLayout(4, 2));
 
         JButton signInButton = new JButton("Sign In");
         signInButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "SignIn"));
 
-        JButton signUpButton = new JButton("Sign Up");
+        JButton signUpButton = new JButton("Create Account");
         signUpButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "SignUp"));
 
         JButton managerSignInButton = new JButton("Manager Sign In");
         managerSignInButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "ManagerSignIn"));
 
-        JButton cartButton = new JButton("Cart");
+        JButton cartButton = new JButton("View Cart");
         cartButton.addActionListener(e -> {
             if (currentBuyer != null) {
                 cardLayout.show(frame.getContentPane(), "Cart");
@@ -121,14 +224,10 @@ public class ShopGUI {
         });
 
         JButton sortPButton = new JButton("Sort by Price");
-        sortPButton.addActionListener(e -> {
-            displayProducts(storeManager.sortByPrice());
-        });
+        sortPButton.addActionListener(e -> displayProducts(storeManager.sortByPrice()));
 
         JButton sortRButton = new JButton("Sort by Rating");
-        sortRButton.addActionListener(e -> {
-            displayProducts(storeManager.sortByRating());
-        });
+        sortRButton.addActionListener(e -> displayProducts(storeManager.sortByRating()));
 
         controlPanel.add(signInButton);
         controlPanel.add(signUpButton);
@@ -139,33 +238,9 @@ public class ShopGUI {
         controlPanel.add(searchButton);
         controlPanel.add(searchField);
 
-
-        mainPanel.add(controlPanel, BorderLayout.NORTH);
+        return controlPanel;
     }
 
-    private void displayProducts(ArrayList<Product> products) {
-        productDisplayPanel.removeAll();
-        for (Product product : products) {
-            JPanel productPanel = new JPanel();
-            productPanel.setLayout(new GridLayout(1, 4));
-            productPanel.add(new JLabel(product.getName()));
-            productPanel.add(new JLabel("$" + product.getPrice()));
-            productPanel.add(new JLabel(new ImageIcon(product.getImage())));
-            JButton addToCartButton = new JButton("Add to Cart");
-            addToCartButton.addActionListener(e -> {
-                if (currentBuyer != null) {
-                    currentBuyer.addToCart(product);
-                    JOptionPane.showMessageDialog(frame, "Added to cart!");
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Please sign in first!");
-                }
-            });
-            productPanel.add(addToCartButton);
-            productDisplayPanel.add(productPanel);
-        }
-        productDisplayPanel.revalidate();
-        productDisplayPanel.repaint();
-    }
 
     private void setupSignInPanel() {
         signInPanel.setLayout(new GridLayout(3, 2));
@@ -285,9 +360,6 @@ public class ShopGUI {
 
             profilePanel.add(new JLabel("Name:"));
             profilePanel.add(new JLabel(currentBuyer.getName()));
-            
-            profilePanel.add(new JLabel("Address:"));
-            profilePanel.add(new JLabel(currentBuyer.getAddress()));
 
             profilePanel.add(new JLabel("Buyer ID:"));
             profilePanel.add(new JLabel(currentBuyer.getBuyerId()));
