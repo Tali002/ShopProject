@@ -14,7 +14,9 @@ import java.util.ArrayList;
 //https://stackoverflow.com/questions/15363706/how-to-program-this-gui-in-java-swing
 //https://stackoverflow.com/questions/56961921/creating-a-jbutton-with-the-click-of-a-jbutton
 //https://stackoverflow.com/questions/34205782/sort-the-contents-of-a-jtable
-
+//https://stackoverflow.com/questions/54132546/java-login-form
+//https://stackoverflow.com/questions/16636711/java-is-this-good-use-of-bcrypt
+//https://docs.oracle.com/javase/8/docs/technotes/guides/collections/index.html
 
 
 public class ShopGUI {
@@ -72,7 +74,7 @@ public class ShopGUI {
         setupCartPanel();
 
         // Setup manager panel
-        setupManagerProfilePanel()
+        setupManagerProfilePanel();
 
         // Setup profile panel
         setupProfilePanel();
@@ -285,7 +287,7 @@ public class ShopGUI {
         return controlPanel;
     }
 
-        private void setupManagerProfilePanel() {
+    private void setupManagerProfilePanel() {
 
         managerProfilePanel.setLayout(new BorderLayout());
 
@@ -318,13 +320,16 @@ public class ShopGUI {
         JTextField imageField = new JTextField();
         JTextField categoryField = new JTextField();
         JTextField ratingField = new JTextField();
+        JTextField quantityField = new JTextField();
+
 
         Object[] fields = {
                 "Name:", nameField,
                 "Price:", priceField,
                 "Image Path:", imageField,
                 "Category:", categoryField,
-                "Rating:", ratingField
+                "Rating:", ratingField ,
+                "Quantity", quantityField
         };
 
         int result = JOptionPane.showConfirmDialog(frame, fields, "Add Product", JOptionPane.OK_CANCEL_OPTION);
@@ -334,8 +339,9 @@ public class ShopGUI {
             String image = imageField.getText();
             String category = categoryField.getText();
             double rating = Double.parseDouble(ratingField.getText());
+            int quantity = (int) Double.parseDouble(quantityField.getText());
 
-            Product newProduct = new Product(name, price, image, category, rating);
+            Product newProduct = new Product(name, price, image, category, rating,quantity);
             storeManager.addProduct(newProduct);
             displayProducts(storeManager.getAllProducts());
         }
