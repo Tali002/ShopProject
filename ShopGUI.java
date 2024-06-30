@@ -49,7 +49,7 @@ public class ShopGUI {
         frame.add(signInPanel, "SignIn");
         frame.add(signUpPanel, "SignUp");
         frame.add(managerSignInPanel, "ManagerSignIn");
-        frame.add(managerSignInPanel, "Manager");
+        frame.add(managerProfilePanel, "Manager");
         frame.add(cartPanel, "Cart");
         frame.add(profilePanel, "Profile");
         frame.add(editProfilePanel, "EditProfile");
@@ -517,16 +517,15 @@ public class ShopGUI {
         signInButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            // Simplified for example, normally you would have a separate check for managers
             if ("manager".equals(username) && "managerpass".equals(password)) {
                 JOptionPane.showMessageDialog(frame, "Manager sign in successful!");
-                cardLayout.show(frame.getContentPane(), "Main");
+                cardLayout.show(frame.getContentPane(), "Manager");
             } else {
                 JOptionPane.showMessageDialog(frame, "Invalid credentials!");
             }
         });
 
-        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Manager"));
+        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Main"));
 
         managerSignInPanel.add(new JLabel("Username:"));
         managerSignInPanel.add(usernameField);
