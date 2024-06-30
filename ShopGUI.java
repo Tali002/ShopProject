@@ -1,5 +1,8 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -80,9 +83,9 @@ public class ShopGUI {
         productDisplayPanel.setLayout(new GridLayout(0, 1));
         JScrollPane scrollPane = new JScrollPane(productDisplayPanel);
 
-        Product product1 = new Product("Product 1", 100, "image1.jpg", "Category 1", 4.5);
-        Product product2 = new Product("Product 2", 200, "image2.jpg", "Category 2", 3.8);
-        Product product3 = new Product("Product 3", 180, "image3.jpg", "Category 3", 3.3);
+        Product product1 = new Product("Product 1", 100, "resources/image1.jpeg", "Category 1", 4.5);
+        Product product2 = new Product("Product 2", 200, "resources/image2.jpeg", "Category 2", 3.8);
+        Product product3 = new Product("Product 3", 180, "resources/image3.jpeg", "Category 3", 3.3);
 
         storeManager.addProduct(product1);
         storeManager.addProduct(product2);
@@ -108,9 +111,33 @@ public class ShopGUI {
             ClassLoader classLoader = getClass().getClassLoader();
             URL imageURL = classLoader.getResource(product.getImage());
             ImageIcon imageIcon = null;
+            BufferedImage image = null;
             if (imageURL != null) {
-                imageIcon = new ImageIcon(imageURL);
-            } else {
+                try {
+                    image = ImageIO.read(imageURL);
+                } catch (IOException e) {
+                    System.err.println("Error reading image: " + e.getMessage());
+                }
+            }
+            if (imageURL != null) {
+                int maxWidth = 120;
+                int maxHeight = 120;
+
+                // Scale the image (maintain aspect ratio)
+                double aspectRatio = (double) image.getWidth() / (double) image.getHeight();
+                int scaledWidth;
+                int scaledHeight;
+                if (aspectRatio > 1) { // Wider than tall
+                    scaledWidth = maxWidth;
+                    scaledHeight = (int) (maxWidth / aspectRatio);
+                } else { // Taller than wide or equal
+                    scaledHeight = maxHeight;
+                    scaledWidth = (int) (maxHeight * aspectRatio);
+                }
+
+                Image scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+                imageIcon = new ImageIcon(scaledImage);            }
+            else {
                 System.err.println("Warning: Image not found - " + product.getImage());
             }
 
@@ -121,6 +148,7 @@ public class ShopGUI {
             } else {
                 imageLabel = new JLabel("Image unavailable");
             }
+
             c.fill = GridBagConstraints.HORIZONTAL;
             c.gridx = 0;
             c.gridy = 0;
@@ -363,6 +391,9 @@ public class ShopGUI {
 
             profilePanel.add(new JLabel("Buyer ID:"));
             profilePanel.add(new JLabel(currentBuyer.getBuyerId()));
+
+            profilePanel.add(new JLabel("Address:"));
+            profilePanel.add(new JLabel(currentBuyer.getAddress()));
 
             profilePanel.add(new JLabel("Balance:"));
             profilePanel.add(new JLabel(String.valueOf(currentBuyer.getBalance())));
