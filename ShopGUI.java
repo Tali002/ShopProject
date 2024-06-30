@@ -349,10 +349,14 @@ public class ShopGUI {
 
     private void removeProduct() {
         String name = JOptionPane.showInputDialog(frame, "Enter the name of the product to remove:");
-//        if (name != null && !name.isEmpty()) {
-//            storeManager.removeProductByName(name);
-//            displayProducts(storeManager.getAllProducts());
-//        }
+        if (name != null && !name.isEmpty()) {
+            for (Product product : storeManager.getAllProducts()) {
+                if (product.getName().equals(name)) {
+                    storeManager.removeProduct(product);
+                }
+            }
+            displayProducts(storeManager.getAllProducts());
+        }
     }
 
     private void viewRegisteredUsers() {
