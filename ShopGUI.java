@@ -302,28 +302,65 @@ public class ShopGUI {
     }
 
     private void setupSignUpPanel() {
-        signUpPanel.setLayout(new GridLayout(4, 2));
-        JTextField usernameField = new JTextField();
-        JPasswordField passwordField = new JPasswordField();
-        JButton signUpButton = new JButton("Sign Up");
-        JButton backButton = new JButton("Back");
+        signUpPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
 
+        // Username label and input field
+        JLabel usernameLabel = new JLabel("Username:");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        signUpPanel.add(usernameLabel, c);
+
+        JTextField usernameField = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 0;
+        signUpPanel.add(usernameField, c);
+
+        JLabel passwordLabel = new JLabel("Password:");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
+        signUpPanel.add(passwordLabel, c);
+
+        JPasswordField passwordField = new JPasswordField(20);
+        c.gridx = 1;
+        c.gridy = 1;
+        signUpPanel.add(passwordField, c);
+
+        // Sign up button with validation
+        JButton signUpButton = new JButton("Sign Up");
         signUpButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            storeManager.registerUser(username, password);
-            JOptionPane.showMessageDialog(frame, "Sign up successful! Please sign in.");
-            cardLayout.show(frame.getContentPane(), "SignIn");
+
+            if (username.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Please enter a username!");
+                return;
+            }
+            if (password.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Please enter a password!");
+                return;
+            }
+            boolean userCreated = createUser(username, password);
+
+            if (userCreated) {
+                JOptionPane.showMessageDialog(frame, "Sign up successful!");
+            } else {
+                JOptionPane.showMessageDialog(frame, "Sign up failed! Please try again.");
+            }
         });
-
-        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Main"));
-
-        signUpPanel.add(new JLabel("Username:"));
-        signUpPanel.add(usernameField);
-        signUpPanel.add(new JLabel("Password:"));
-        signUpPanel.add(passwordField);
-        signUpPanel.add(signUpButton);
-        signUpPanel.add(backButton);
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.EAST;
+        c.gridwidth = 2;
+        c.gridx = 0;
+        c.gridy = 2;
+        signUpPanel.add(signUpButton, c);
+    }
+    // Replace this with your actual user creation logic (assuming UserManager class)
+    private boolean createUser(String username, String password) {
+        storeManager.registerUser(username, password);
+        return storeManager.verifyUserCredentials(username, password);
     }
 
     private void setupManagerSignInPanel() {
