@@ -271,35 +271,77 @@ public class ShopGUI {
 
 
     private void setupSignInPanel() {
-        signInPanel.setLayout(new GridLayout(3, 2));
-        JTextField usernameField = new JTextField();
-        JPasswordField passwordField = new JPasswordField();
-        JButton signInButton = new JButton("Sign In");
-        JButton backButton = new JButton("Back");
+        signInPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
 
+        JLabel usernameLabel = new JLabel("Username:", JLabel.LEFT);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        signInPanel.add(usernameLabel, c);
+
+        JTextField usernameField = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 0;
+        signInPanel.add(usernameField, c);
+
+        JLabel passwordLabel = new JLabel("Password:", JLabel.LEFT);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
+        signInPanel.add(passwordLabel, c);
+
+        JPasswordField passwordField = new JPasswordField(20);
+        c.gridx = 1;
+        c.gridy = 1;
+        signInPanel.add(passwordField, c);
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Main"));
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.WEST;
+        c.gridwidth = 2;
+        c.gridx = 0;
+        c.gridy = 2;
+        signInPanel.add(backButton, c);
+
+        // Sign up button with validation
+        JButton signInButton = new JButton("Sign In");
         signInButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            if (storeManager.verifyUserCredentials(username, password)) {
-                currentBuyer = new Buyer(username, "buyerId", 1000, "pass","add"); // Simplified for example
-                userPanel = new UserPanel(currentBuyer);
+
+            if (username.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Please enter a username!");
+                return;
+            }
+            if (password.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Please enter a password!");
+                return;
+            }
+            boolean loggedIn = signInUser(username, password);
+
+            if (loggedIn) {
                 JOptionPane.showMessageDialog(frame, "Sign in successful!");
+                currentBuyer = new Buyer(username, "buyerId", 1000, password,"add"); 
+                userPanel = new UserPanel(currentBuyer);
                 cardLayout.show(frame.getContentPane(), "Profile");
                 setupProfilePanel();
             } else {
-                JOptionPane.showMessageDialog(frame, "Invalid credentials!");
+                JOptionPane.showMessageDialog(frame, "Sign in failed! Please check your username and password.");
             }
         });
-
-        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Main"));
-
-        signInPanel.add(new JLabel("Username:"));
-        signInPanel.add(usernameField);
-        signInPanel.add(new JLabel("Password:"));
-        signInPanel.add(passwordField);
-        signInPanel.add(signInButton);
-        signInPanel.add(backButton);
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.EAST;
+        c.gridwidth = 2;
+        c.gridx = 0;
+        c.gridy = 2;
+        signInPanel.add(signInButton, c);
     }
+    private boolean signInUser(String username, String password) {
+        return storeManager.verifyUserCredentials(username, password);
+    }
+
 
     private void setupSignUpPanel() {
         signUpPanel.setLayout(new GridBagLayout());
@@ -493,7 +535,7 @@ public class ShopGUI {
             editProfilePanel.add(locationLabel, c);
 
             JTextField locationField = new JTextField(20);
-            locationField.setText(currentBuyer.getAddress()); // Set initial value
+            locationField.setText(currentBuyer.getAddress());
             c.gridx = 1;
             c.gridy = 1;
             editProfilePanel.add(locationField, c);
@@ -504,13 +546,11 @@ public class ShopGUI {
                 String newName = nameField.getText();
                 String newLocation = locationField.getText();
 
-                // Validation (replace with your logic)
                 if (newName.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Please enter a name!");
                     return;
                 }
 
-                // Update user profile (replace with your data storage logic)
                 currentBuyer.setName(newName);
                 currentBuyer.setAddress(newLocation);
                 JOptionPane.showMessageDialog(frame, "Profile updated successfully!");
@@ -526,20 +566,7 @@ public class ShopGUI {
             c.gridy = 2;
             editProfilePanel.add(saveButton, c);
 
-            // Set basic values button (optional)
-            JButton setBasicButton = new JButton("Set Basic Values");
-            setBasicButton.addActionListener(e -> {
-                nameField.setText("Default Name"); // Replace with your basic name
-                locationField.setText("Default Location"); // Replace with your basic location
-            });
-            c.fill = GridBagConstraints.NONE;
-            c.anchor = GridBagConstraints.EAST;
-            c.gridwidth = 2;
-            c.gridx = 0;
-            c.gridy = 3;
-            editProfilePanel.add(setBasicButton, c);
-            // ... rest of your code using currentBuyer ...
-            nameField.setText(currentBuyer.getName()); // Assuming getName() exists in Buyer
+            nameField.setText(currentBuyer.getName());
         }
 
     }
