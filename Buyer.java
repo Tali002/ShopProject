@@ -36,7 +36,7 @@ public class Buyer implements Cartable {
         return password;
     }
 
-        public String getAddress() {
+    public String getAddress() {
         return address;
     }
 
@@ -75,10 +75,16 @@ public class Buyer implements Cartable {
         this.password = password;
     }
 
-        public void setAddress(String Address) {
+    public void setAddress(String Address) {
         this.address = address;
     }
-
+    public void deductBalance(double amount) {
+        if (balance >= amount) {
+            balance -= amount;
+        } else {
+            System.out.println("Insufficient balance for purchase!");
+        }
+    }
     public void addBalance(double amount) {
         this.balance += amount;
     }
